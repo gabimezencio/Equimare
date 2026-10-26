@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #121216;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+#game-container canvas {
+    border: 3px solid #f28db2; /* Borda rosa combinando com a Princess Cowgirl */
+    border-radius: 6px;
+    image-rendering: pixelated; /* Garante que a Pixel Art fique nítida */
+}
