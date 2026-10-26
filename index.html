@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equimare</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Carrega a biblioteca Phaser 3 -->
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
+    <!-- MENU INICIAL -->
+    <div id="main-menu">
+        <!-- Camada da imagem de fundo que recebe o Blur via CSS -->
+        <div class="menu-bg"></div>
+
+        <!-- Conteúdo centralizado (Título e Botões) -->
+        <div class="menu-content">
+            <h1 class="game-title">EQUIMARE</h1>
+
+            <div class="menu-buttons">
+                <button id="btn-new-game" class="menu-btn">NEW GAME</button>
+                <button id="btn-load-game" class="menu-btn">LOAD GAME</button>
+                <button id="btn-options" class="menu-btn">OPTIONS</button>
+                <button id="btn-quit" class="menu-btn">QUIT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTAINER DO JOGO (PHASER) -->
     <div id="game-container"></div>
-    <!-- Carrega o código principal do nosso jogo -->
+
+    <script src="src/entities.js"></script>
     <script src="src/main.js"></script>
 </body>
 </html>

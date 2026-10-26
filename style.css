@@ -1,21 +1,124 @@
+/* 1. Carregamento das três fontes personalizadas */
+@font-face {
+    font-family: 'Cinzel';
+    src: url('assets/Cinzel-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Marcellus';
+    src: url('assets/Marcellus-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'MPLUSRounded1c';
+    src: url('assets/MPLUSRounded1c-Regular.ttf') format('truetype');
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
-body {
-    background-color: #121216;
+/* 2. Cursor padrão em toda a tela do jogo */
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #121316;
+    overflow: hidden;
+    font-family: 'MPLUSRounded1c', sans-serif;
+    cursor: url('assets/cursor.png'), auto;
+}
+
+/* 3. Estrutura do Menu Inicial */
+#main-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000; /* Fica na frente do jogo até clicar em NEW GAME */
+}
+
+/* 4. Imagem de fundo com efeito Borrado (Blur) automático */
+.menu-bg {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-image: url('assets/menu-bg.jpg'); /* Troque para .png se sua imagem for png */
+    background-size: cover;
+    background-position: center;
+    filter: blur(6px); /* Nível do desfoque (aumente ou diminua se quiser) */
+    transform: scale(1.04); /* Evita bordas brancas causadas pelo blur */
+    z-index: -1;
+}
+
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -30px;
+}
+
+/* 5. Título EQUIMARE com a fonte Cinzel (aquele Q com cauda longa clássica) */
+.game-title {
+    font-family: 'Cinzel', serif;
+    font-weight: normal;
+    font-size: 72px;
+    color: #ffffff;
+    letter-spacing: 3px;
+    margin-bottom: 45px;
+    text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* 6. Lista de Botões */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Estilo base dos botões (Bege e fonte Marcellus) */
+.menu-btn {
+    width: 240px;
+    height: 60px;
+    background-color: #dcd5c5;
+    color: #1e293b;
+    font-family: 'Marcellus', serif;
+    font-size: 27px;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* Muda para o seu pointer.png quando passa em cima do botão */
+    cursor: url('assets/pointer.png'), pointer;
+}
+
+/* Quando passa o mouse por cima: fica Rosa igual à sua segunda imagem */
+.menu-btn:hover {
+    background-color: #f3bac9;
+}
+
+.menu-btn:active {
+    transform: scale(0.98);
+}
+
+#game-container {
+    width: 100vw;
     height: 100vh;
-    overflow: hidden;
-    font-family: sans-serif;
 }
 
 #game-container canvas {
-    border: 3px solid #f28db2; /* Borda rosa combinando com a Princess Cowgirl */
-    border-radius: 6px;
-    image-rendering: pixelated; /* Garante que a Pixel Art fique nítida */
+    display: block;
+    image-rendering: pixelated;
 }
