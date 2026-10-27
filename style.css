@@ -1,4 +1,4 @@
-/* 1. Carregamento das três fontes personalizadas */
+/* 1. Fontes personalizadas */
 @font-face {
     font-family: 'Cinzel';
     src: url('assets/Cinzel-Regular.ttf') format('truetype');
@@ -21,7 +21,6 @@
     user-select: none;
 }
 
-/* 2. Cursor padrão em toda a tela do jogo */
 body, html {
     width: 100%;
     height: 100%;
@@ -31,8 +30,17 @@ body, html {
     cursor: url('assets/cursor.png'), auto;
 }
 
-/* 3. Estrutura do Menu Inicial */
-#main-menu {
+.hidden {
+    display: none !important;
+}
+
+/* 2. Estrutura de Menus e Overlays */
+#main-menu,
+#pause-menu,
+#options-menu,
+#gameover-menu,
+#cutscene-screen,
+#blackjack-screen {
     position: fixed;
     top: 0;
     left: 0;
@@ -41,21 +49,81 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Fica na frente do jogo até clicar em NEW GAME */
+    z-index: 1000;
 }
 
-/* 4. Imagem de fundo com efeito Borrado (Blur) automático */
+#pause-menu,
+#options-menu {
+    background-color: rgba(18, 19, 22, 0.55);
+    z-index: 1250;
+}
+
+/* Tela de Game Over Vermelha */
+#gameover-menu {
+    background-color: #8b0000;
+    z-index: 1300;
+}
+
+/* 3. Cutscenes e Telas de Transição (Preta, Vermelha, Branca e Gradiente) */
+#cutscene-screen {
+    background-color: #0b0b0e;
+    z-index: 1200;
+    padding: 40px;
+    text-align: center;
+    cursor: url('assets/pointer.png'), pointer;
+}
+
+#cutscene-screen.red-screen {
+    background-color: #b30000;
+}
+
+#cutscene-screen.white-screen {
+    background-color: #ffffff;
+}
+
+/* Transição gradiente para o branco ao vencer o Blackjack */
+#cutscene-screen.white-gradient-transition {
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #f5f5f7 40%, #ffffff 100%);
+    animation: fadeToWhite 2.2s ease-in-out forwards;
+}
+
+@keyframes fadeToWhite {
+    0% {
+        opacity: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+    50% {
+        opacity: 0.85;
+    }
+    100% {
+        opacity: 1;
+        background-color: #ffffff;
+    }
+}
+
+#cutscene-text {
+    font-family: 'Cinzel', serif;
+    font-weight: normal;
+    font-size: 52px;
+    color: #ffffff;
+    max-width: 950px;
+    line-height: 1.35;
+    letter-spacing: 2px;
+    text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* 4. Menu Inicial e Botões */
 .menu-bg {
     position: absolute;
     top: -20px;
     left: -20px;
     right: -20px;
     bottom: -20px;
-    background-image: url('assets/menu-bg.jpg'); /* Troque para .png se sua imagem for png */
+    background-image: url('assets/menu-bg.png');
     background-size: cover;
     background-position: center;
-    filter: blur(6px); /* Nível do desfoque (aumente ou diminua se quiser) */
-    transform: scale(1.04); /* Evita bordas brancas causadas pelo blur */
+    filter: blur(6px);
+    transform: scale(1.04);
     z-index: -1;
 }
 
@@ -63,35 +131,32 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: -30px;
+    margin-top: -20px;
 }
 
-/* 5. Título EQUIMARE com a fonte Cinzel (aquele Q com cauda longa clássica) */
 .game-title {
     font-family: 'Cinzel', serif;
     font-weight: normal;
     font-size: 72px;
     color: #ffffff;
     letter-spacing: 3px;
-    margin-bottom: 45px;
-    text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+    margin-bottom: 35px;
+    text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.35);
 }
 
-/* 6. Lista de Botões */
 .menu-buttons {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
-/* Estilo base dos botões (Bege e fonte Marcellus) */
 .menu-btn {
     width: 240px;
-    height: 60px;
+    height: 56px;
     background-color: #dcd5c5;
     color: #1e293b;
     font-family: 'Marcellus', serif;
-    font-size: 27px;
+    font-size: 26px;
     letter-spacing: 1px;
     border: none;
     border-radius: 7px;
@@ -99,23 +164,246 @@ body, html {
     justify-content: center;
     align-items: center;
     transition: background-color 0.15s ease, transform 0.1s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    /* Muda para o seu pointer.png quando passa em cima do botão */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: url('assets/pointer.png'), pointer;
+    outline: none;
 }
 
-/* Quando passa o mouse por cima: fica Rosa igual à sua segunda imagem */
-.menu-btn:hover {
+.menu-btn:hover,
+.menu-btn.selected {
     background-color: #f3bac9;
+    transform: scale(1.03);
 }
 
 .menu-btn:active {
     transform: scale(0.98);
 }
 
+/* 5. Options Slider */
+.options-box {
+    background-color: #dcd5c5;
+    padding: 24px 32px;
+    border-radius: 7px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 340px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.options-box.selected {
+    background-color: #f3bac9;
+    transform: scale(1.03);
+}
+
+.options-label {
+    font-family: 'Marcellus', serif;
+    font-size: 22px;
+    color: #1e293b;
+    letter-spacing: 1px;
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #1e293b;
+    border-radius: 5px;
+    outline: none;
+    cursor: url('assets/pointer.png'), pointer;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f3bac9;
+    border: 2px solid #1e293b;
+    cursor: url('assets/pointer.png'), pointer;
+}
+
+.options-box.selected #volume-slider::-webkit-slider-thumb {
+    background: #dcd5c5;
+    transform: scale(1.15);
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f3bac9;
+    border: 2px solid #1e293b;
+    cursor: url('assets/pointer.png'), pointer;
+}
+
+/* 6. Mesa de Blackjack contra o Diabo */
+#blackjack-screen {
+    background: radial-gradient(circle, #1f1116 0%, #09090b 100%);
+    z-index: 1050;
+    transition: filter 0.2s ease;
+}
+
+.bj-container {
+    width: 95%;
+    max-width: 900px;
+    height: 94vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+}
+
+.bj-dealer-section,
+.bj-player-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.bj-dealer-img {
+    width: 220px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #dcd5c5;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+}
+
+.bj-hand-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    color: #dcd5c5;
+    letter-spacing: 2px;
+}
+
+.bj-cards-row {
+    display: flex;
+    gap: 12px;
+    min-height: 110px;
+    align-items: center;
+    justify-content: center;
+}
+
+.bj-card {
+    width: 76px;
+    height: 108px;
+    background-color: #f8fafc;
+    color: #0f172a;
+    border-radius: 7px;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+}
+
+.bj-card.red {
+    color: #dc2626;
+}
+
+.bj-card.hidden-card {
+    background: repeating-linear-gradient(
+        45deg,
+        #2b1115,
+        #2b1115 10px,
+        #451a20 10px,
+        #451a20 20px
+    );
+    border-color: #dcd5c5;
+    color: #dcd5c5;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+}
+
+.bj-card-center {
+    align-self: center;
+    font-size: 28px;
+}
+
+.bj-message {
+    font-family: 'Cinzel', serif;
+    font-size: 25px;
+    color: #f3bac9;
+    text-align: center;
+    letter-spacing: 1.5px;
+    padding: 8px 18px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 8px;
+}
+
+.bj-stats-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 4px;
+}
+
+.bj-hp-pill,
+.bj-bet-pill {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-family: 'MPLUSRounded1c', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    border: 2px solid #000000;
+}
+
+.bj-hp-pill {
+    background-color: #d9383a;
+}
+
+.bj-bet-pill {
+    background-color: #1e293b;
+}
+
+.bj-controls-row {
+    display: flex;
+    gap: 14px;
+}
+
+.bj-btn {
+    width: 165px;
+    height: 50px;
+    font-size: 22px;
+}
+
+/* 7. Notificação de Save e Blur do Pause */
+#toast-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #f3bac9;
+    color: #1e293b;
+    font-family: 'Marcellus', serif;
+    font-size: 22px;
+    padding: 12px 24px;
+    border-radius: 7px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 2000;
+}
+
 #game-container {
     width: 100vw;
     height: 100vh;
+    transition: filter 0.2s ease;
+}
+
+.game-blurred {
+    filter: blur(6px);
+    transform: scale(1.02);
 }
 
 #game-container canvas {

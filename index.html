@@ -8,13 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
-    <!-- MENU INICIAL -->
+    <!-- Pré-carregamento das fontes para o Canvas do Phaser -->
+    <div style="font-family: 'MPLUSRounded1c'; position: absolute; left: -9999px; visibility: hidden;">100/100 KILLS</div>
+    <div style="font-family: 'Cinzel'; position: absolute; left: -9999px; visibility: hidden;">EQUIMARE</div>
+
+    <!-- 1. MENU INICIAL -->
     <div id="main-menu">
-        <!-- Camada da imagem de fundo que recebe o Blur via CSS -->
         <div class="menu-bg"></div>
 
-        <!-- Conteúdo centralizado (Título e Botões) -->
-        <div class="menu-content">
+        <div id="main-menu-content" class="menu-content">
             <h1 class="game-title">EQUIMARE</h1>
 
             <div class="menu-buttons">
@@ -26,10 +28,107 @@
         </div>
     </div>
 
+    <!-- 2. CUTSCENE E TELAS DE TRANSIÇÃO (Intro, Tela Vermelha, Tela Branca 10 Kills e Gradiente Final) -->
+    <div id="cutscene-screen" class="hidden">
+        <h2 id="cutscene-text"></h2>
+    </div>
+
+    <!-- 3. PAUSE MENU (Com RESUME em 1º lugar) -->
+    <div id="pause-menu" class="hidden">
+        <div id="pause-menu-content" class="menu-content">
+            <h1 class="game-title">PAUSED</h1>
+
+            <div class="menu-buttons">
+                <button id="btn-pause-resume" class="menu-btn">RESUME</button>
+                <button id="btn-pause-save" class="menu-btn">SAVE GAME</button>
+                <button id="btn-pause-load" class="menu-btn">LOAD GAME</button>
+                <button id="btn-pause-options" class="menu-btn">OPTIONS</button>
+                <button id="btn-pause-main" class="menu-btn">MAIN MENU</button>
+                <button id="btn-pause-quit" class="menu-btn">QUIT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. MENU DE OPTIONS -->
+    <div id="options-menu" class="hidden">
+        <div class="menu-content">
+            <h1 class="game-title">OPTIONS</h1>
+
+            <div class="options-box">
+                <label for="volume-slider" class="options-label">
+                    MUSIC VOLUME: <span id="volume-value">50%</span>
+                </label>
+                <input type="range" id="volume-slider" min="0" max="100" value="50">
+            </div>
+
+            <div class="menu-buttons">
+                <button id="btn-options-back" class="menu-btn">BACK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TELA DE GAME OVER (Fundo Vermelho, Pause Desabilitado) -->
+    <div id="gameover-menu" class="hidden">
+        <div class="menu-content">
+            <h1 class="game-title">GAME OVER</h1>
+
+            <div class="menu-buttons">
+                <button id="btn-gameover-load" class="menu-btn">LOAD GAME</button>
+                <button id="btn-gameover-main" class="menu-btn">MAIN MENU</button>
+                <button id="btn-gameover-quit" class="menu-btn">QUIT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MESA DE BLACKJACK CONTRA O DIABO -->
+    <div id="blackjack-screen" class="hidden">
+        <div class="bj-container">
+            <!-- Área do Dealer -->
+            <div class="bj-dealer-section">
+                <img src="assets/diabonaro.png" alt="The Devil" class="bj-dealer-img">
+                <div class="bj-hand-title">DEALER'S HAND: <span id="bj-dealer-score">?</span></div>
+                <div id="bj-dealer-cards" class="bj-cards-row"></div>
+            </div>
+
+            <!-- Mensagem Central -->
+            <div id="bj-message" class="bj-message">PLACE YOUR HEALTH BET (MIN 5 HP)</div>
+
+            <!-- Área da Princess Cowgirl -->
+            <div class="bj-player-section">
+                <div class="bj-hand-title">YOUR HAND: <span id="bj-player-score">0</span></div>
+                <div id="bj-player-cards" class="bj-cards-row"></div>
+
+                <div class="bj-stats-bar">
+                    <div class="bj-hp-pill">HEALTH: <span id="bj-hp-text">100/100</span></div>
+                    <div class="bj-bet-pill">CURRENT BET: <span id="bj-bet-text">5</span> HP</div>
+                </div>
+
+                <!-- Controles de Aposta (Antes de dar as cartas) -->
+                <div id="bj-bet-controls" class="bj-controls-row">
+                    <button id="btn-bj-minus" class="menu-btn bj-btn">-5 HP</button>
+                    <button id="btn-bj-plus" class="menu-btn bj-btn">+5 HP</button>
+                    <button id="btn-bj-deal" class="menu-btn bj-btn">DEAL</button>
+                </div>
+
+                <!-- Controles de Ação (Durante a mão) -->
+                <div id="bj-play-controls" class="bj-controls-row hidden">
+                    <button id="btn-bj-hit" class="menu-btn bj-btn">HIT</button>
+                    <button id="btn-bj-stand" class="menu-btn bj-btn">STAND</button>
+                    <button id="btn-bj-double" class="menu-btn bj-btn">DOUBLE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aviso rápido de Save/Load -->
+    <div id="toast-notification" class="hidden">GAME SAVED!</div>
+
     <!-- CONTAINER DO JOGO (PHASER) -->
     <div id="game-container"></div>
 
+    <!-- Ordem exata dos scripts -->
     <script src="src/entities.js"></script>
+    <script src="src/blackjack.js"></script>
     <script src="src/main.js"></script>
 </body>
 </html>
